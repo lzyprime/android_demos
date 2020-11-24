@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/photoListFragment">
+
+    <fragment
+        android:id="@+id/photoListFragment"
+        android:name="io.lzyprime.mvvmdemo.view.PhotoListFragment"
+        android:label="fragment_photo_list"
+        tools:layout="@layout/fragment_photo_list" >
+        <action
+            android:id="@+id/action_photoListFragment_to_detailFragment"
+            app:destination="@id/detailFragment">
+            <argument
+                android:name="imageSrc"
+                android:defaultValue='' />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="io.lzyprime.mvvmdemo.view.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="imageSrc"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="io.lzyprime.mvvmdemo.view.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_photoListFragment"
+            app:destination="@id/photoListFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

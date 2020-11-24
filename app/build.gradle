@@ -1,14 +1,21 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+//    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id "androidx.navigation.safeargs.kotlin"
 }
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
+
+    buildFeatures {
+        viewBinding true // 视图绑定，取代`kotlin-android-extensions`
+        dataBinding true // 数据绑定
+        compose true
+    }
 
     defaultConfig {
         applicationId "io.lzyprime.mvvmdemo"
@@ -33,40 +40,73 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.1'
+    }
 }
 
 dependencies {
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
-    testImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // startup
+//    implementation "androidx.startup:startup-runtime:1.1.0"
+
+    // dataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     //Retrofit
     def retrofit_version = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
 
     // 协程 ktx
-    def lifecycle_version = "2.2.0"
+    def lifecycle_version = '2.3.1'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.activity:activity-ktx:1.1.0"
+    implementation 'androidx.activity:activity-ktx:1.3.1'
 
     //hilt 依赖注入
     implementation "com.google.dagger:hilt-android:$rootProject.hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$rootProject.hilt_version"
-    def hilt_vm_version = "1.0.0-alpha02"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_vm_version"
-    kapt "androidx.hilt:hilt-compiler:$hilt_vm_version"
 
-    // glide 网络图片
-    def glide_version = "4.11.0"
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    // coil 网络图片
+    def coil_version = '1.3.2'
+    implementation "io.coil-kt:coil:$coil_version"
+    implementation "io.coil-kt:coil-compose:$coil_version"
+
+    // navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$rootProject.nav_version"
+
+    // compose
+    def compose_version = '1.0.1'
+    // Integration with activities
+    implementation "androidx.activity:activity-compose:1.3.1"
+    // Compose Material Design
+    implementation "androidx.compose.material:material:$compose_version"
+    // Animations
+    implementation "androidx.compose.animation:animation:$compose_version"
+    // Tooling support (Previews, etc.)
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    // When using a MDC theme
+    implementation "com.google.android.material:compose-theme-adapter:$compose_version"
+    // When using a AppCompat theme
+    implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
+    // Integration with ViewModels
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
+    // UI Tests
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+
+    // IM
+    implementation 'com.tencent.imsdk:imsdk-plus:5.5.897'
 }

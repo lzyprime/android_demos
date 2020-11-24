@@ -2,56 +2,67 @@ package io.lzyprime.mvvmdemo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import io.lzyprime.mvvmdemo.viewmodels.ListPhotoViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import io.lzyprime.mvvmdemo.databinding.ActivityMainBinding
+import io.lzyprime.mvvmdemo.extension.viewBinding
+import io.lzyprime.mvvmdemo.utils.*
+import io.lzyprime.mvvmdemo.viewmodel.ListPhotoViewModel
+import io.lzyprime.mvvmdemo.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val model: ListPhotoViewModel by viewModels()
+    private val viewModel: ListPhotoViewModel by viewModels()
+    private val userModel by viewModels<UserViewModel>()
+    private val binding by viewBinding<ActivityMainBinding>()
 
-    init {
-        lifecycleScope.launchWhenCreated {
-            model.refreshListPhotos()
-        }
-    }
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
-        refreshBtn.setOnClickListener {
-            model.refreshListPhotos()
-        }
+        val navHost = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
+        navController = navHost.findNavController()
 
-        photoList.layoutManager = GridLayoutManager(this, 2)
-        model.listPhotos.observe(this) { photos ->
-            photoList.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-                override fun onCreateViewHolder(
-                    parent: ViewGroup,
-                    viewType: Int
-                ): RecyclerView.ViewHolder = object : RecyclerView.ViewHolder(
-                    ImageView(parent.context)
-                ) {}
 
-                override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-                    val photo = photos[position]
-
-                    with(holder.itemView as ImageView) {
-                        Glide.with(this).load(photo.urls.raw).into(this)
-                    }
-                }
-
-                override fun getItemCount(): Int = photos.size
+        onBackPressedDispatcher.addCallback(this) {
+            if (!navController.navigateUp()) {
+                finish()
             }
         }
+
+        initGraph()
+    }
+
+    private fun initGraph() {
+        val graph = navController.navInflater.inflate(R.navigation.main_graph)
+        val dataStore = dataStore
+        lifecycleScope.launch {
+            val userId = dataStore.get(USER_ID)
+            val sig = dataStore.get(SIG)
+            graph.startDestination =
+                if (userId.isNullOrEmpty() ||
+                    sig.isNullOrEmpty() ||
+                    !userModel.login(userId, sig)
+                ) {
+                    R.id.loginFragment
+                } else {
+                    R.id.photoList
+                }
+        }.invokeOnCompletion {
+            navController.graph = graph
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        // 是否显示返回按钮
+        return navController.previousBackStackEntry != null || super.onSupportNavigateUp()
     }
 }

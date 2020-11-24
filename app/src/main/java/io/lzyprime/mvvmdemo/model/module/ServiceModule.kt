@@ -1,18 +1,19 @@
-package io.lzyprime.mvvmdemo.data.api
+package io.lzyprime.mvvmdemo.model.module
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
+import io.lzyprime.mvvmdemo.model.api.UnsplashService
 import io.lzyprime.mvvmdemo.utils.Net
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object ServiceModule {
     private inline fun <reified T> createService(): T = Net.retrofit.create(T::class.java)
 
     @Singleton
     @Provides
-    fun unsplashService():UnsplashService = createService()
+    fun unsplashService(): UnsplashService = createService()
 }

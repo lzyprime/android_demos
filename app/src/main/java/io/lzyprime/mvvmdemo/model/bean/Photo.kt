@@ -1,4 +1,4 @@
-package io.lzyprime.mvvmdemo.data.bean
+package io.lzyprime.mvvmdemo.model.bean
 
 data class Photo(
     val id: String,
@@ -15,5 +15,13 @@ data class Photo(
         val regular: String,
         val small: String,
         val thumb: String,
+    )
+    data class User(
+        val id:String,
+        val updated_at:String = "",
+        val username:String="",
+        val name:String = "",
+        val first_name:String = "",
+        val last_name:String = "",
     )
 }
