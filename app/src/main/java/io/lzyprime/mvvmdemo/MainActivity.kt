@@ -2,56 +2,52 @@ package io.lzyprime.mvvmdemo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.lzyprime.mvvmdemo.viewmodels.ListPhotoViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val model: ListPhotoViewModel by viewModels()
-
-    init {
-        lifecycleScope.launchWhenCreated {
-            model.refreshListPhotos()
-        }
-    }
-
+    private val viewModel: ListPhotoViewModel by viewModels()
+    private var loginSuccess = false
+    private lateinit var appBarConfiguration: AppBarConfiguration
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        refreshBtn.setOnClickListener {
-            model.refreshListPhotos()
-        }
+        val navHost = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
+        val navController = navHost.findNavController()
 
-        photoList.layoutManager = GridLayoutManager(this, 2)
-        model.listPhotos.observe(this) { photos ->
-            photoList.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-                override fun onCreateViewHolder(
-                    parent: ViewGroup,
-                    viewType: Int
-                ): RecyclerView.ViewHolder = object : RecyclerView.ViewHolder(
-                    ImageView(parent.context)
-                ) {}
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.loginFragment, R.id.photoListFragment))
+        // 顶部appBar
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
-                override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-                    val photo = photos[position]
-
-                    with(holder.itemView as ImageView) {
-                        Glide.with(this).load(photo.urls.raw).into(this)
-                    }
-                }
-
-                override fun getItemCount(): Int = photos.size
+        viewModel.listPhotos.observe(this) {
+            // 列表不为空,登录成功
+            if (!loginSuccess && it.isNotEmpty()) {
+                loginSuccess = true
+                Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show()
+                navController.navigate(R.id.action_loginFragment_to_photoListFragment)
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        // 是否显示返回按钮
+        return mainNavHost.findNavController().navigateUp(appBarConfiguration)
+                || super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        // 系统返回事件
+        if (!mainNavHost.findNavController().popBackStack()) finish()
     }
 }
