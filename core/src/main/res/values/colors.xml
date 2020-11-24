@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="yin_hong_hui">#b598a1</color>
+    <color name="pin_lan">#2b73af</color>
+    <color name="pin_lan_variant">#215F93</color>
+    <color name="yan_lan">#144a74</color>
+    <color name="pin_hong">#ef3473</color>
+    <color name="pin_hong_variant">#B81D52</color>
+    <color name="he_huan_hong">#f0a1a8</color>
+    <color name="he_huan_hong_variant">#D08087</color>
+    <color name="luan_shi_zi">#30161c</color>
+    <color name="qian_shi_bai">#e2e1e4</color>
+    <color name="yuan_shan_zi">#ccccd6</color>
+</resources>
