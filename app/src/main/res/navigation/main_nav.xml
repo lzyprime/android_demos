@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_nav"
+    app:startDestination="@id/item1">
+
+    <fragment
+        android:id="@+id/item1"
+        android:name="io.lzyprime.bottomnavigation.Item1Fragment"
+        android:label="111item1" />
+    <fragment
+        android:id="@+id/item2"
+        android:name="io.lzyprime.bottomnavigation.Item2Fragment"
+        android:label="222item2" />
+    <fragment
+        android:id="@+id/item3"
+        android:name="io.lzyprime.bottomnavigation.Item3Fragment"
+        android:label="333item3" />
+</navigation>
