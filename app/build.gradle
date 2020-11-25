@@ -1,12 +1,17 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+//    id 'kotlin-android-extensions'
 }
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
+
+
+    buildFeatures {
+        viewBinding true // 视图绑定，取代`kotlin-android-extensions`
+    }
 
     defaultConfig {
         applicationId "io.lzyprime.bottomnavigation"
@@ -45,7 +50,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // navigation
-    def nav_version = "2.3.1"
+    def nav_version = "2.3.2"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 }

@@ -2,17 +2,19 @@ package io.lzyprime.bottomnavigation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import kotlinx.android.synthetic.main.activity_main.*
+import io.lzyprime.bottomnavigation.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment
-        mainBtmNavView.setupWithNavController(navHostFragment.findNavController())
+        binding.mainBtmNavView.setupWithNavController(navHostFragment.findNavController())
     }
 }
