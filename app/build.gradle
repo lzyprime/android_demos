@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+//    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id "androidx.navigation.safeargs.kotlin"
@@ -10,6 +10,11 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
+
+    buildFeatures {
+        viewBinding true // 视图绑定，取代`kotlin-android-extensions`
+        dataBinding true // 数据绑定
+    }
 
     defaultConfig {
         applicationId "io.lzyprime.mvvmdemo"
@@ -73,9 +78,8 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // navigation
-    def nav_version = "2.3.1"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$rootProject.nav_version"
     // Feature module Support
     //implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
     // Testing Navigation

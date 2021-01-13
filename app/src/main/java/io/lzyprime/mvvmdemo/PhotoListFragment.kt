@@ -10,23 +10,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import io.lzyprime.mvvmdemo.databinding.FragmentPhotoListBinding
 import io.lzyprime.mvvmdemo.viewmodels.ListPhotoViewModel
-import kotlinx.android.synthetic.main.fragment_photo_list.*
 
 class PhotoListFragment : Fragment(R.layout.fragment_photo_list) {
     private val model: ListPhotoViewModel by activityViewModels()
+    private lateinit var binding:FragmentPhotoListBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        refreshBtn.setOnClickListener {
+        binding = FragmentPhotoListBinding.bind(view)
+        binding.refreshBtn.setOnClickListener {
             model.refreshListPhotos()
         }
 
-        photoList.layoutManager = GridLayoutManager(context, 2)
+        binding.photoList.layoutManager = GridLayoutManager(context, 2)
         model.listPhotos.observe(viewLifecycleOwner) { photos ->
-            photoList.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            binding.photoList.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 override fun onCreateViewHolder(
                     parent: ViewGroup,
                     viewType: Int

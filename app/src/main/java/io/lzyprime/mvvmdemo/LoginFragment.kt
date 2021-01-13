@@ -5,17 +5,19 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import io.lzyprime.mvvmdemo.databinding.FragmentLoginBinding
 import io.lzyprime.mvvmdemo.utils.Net
 import io.lzyprime.mvvmdemo.viewmodels.ListPhotoViewModel
-import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private val viewModel: ListPhotoViewModel by activityViewModels()
-
+    private lateinit var binding: FragmentLoginBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loginBtn.setOnClickListener {
-            val text = access_key_eidt_text.text.toString()
+        binding = FragmentLoginBinding.bind(view)
+
+        binding.loginBtn.setOnClickListener {
+            val text = binding.accessKeyEidtText.text.toString()
             if (text.isEmpty()) {
                 Toast.makeText(context, "不能为空!", Toast.LENGTH_SHORT).show()
             } else {
