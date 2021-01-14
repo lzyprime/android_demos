@@ -11,6 +11,7 @@
         android:theme="@style/Theme.BottomNavigation">
         <activity android:name=".SecondaryActivity"
             android:label="SecondaryActivity"
+            android:parentActivityName=".MainActivity"
             />
         <activity android:name=".MainActivity">
             <intent-filter>

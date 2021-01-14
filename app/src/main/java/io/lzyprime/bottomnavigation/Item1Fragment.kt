@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.item1_fragment.*
+import io.lzyprime.bottomnavigation.databinding.Item1FragmentBinding
+
 
 class Item1Fragment:Fragment(R.layout.item1_fragment) {
+    private lateinit var binding: Item1FragmentBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = Item1FragmentBinding.bind(view)
+
         Log.d("Item1", "onViewCreated")
-        item1_btn.setOnClickListener {
+        binding.item1Btn.setOnClickListener {
             startActivity(Intent(context, SecondaryActivity::class.java))
         }
     }
