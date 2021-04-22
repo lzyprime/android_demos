@@ -11,15 +11,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import io.lzyprime.mvvmdemo.databinding.FragmentPhotoListBinding
+import io.lzyprime.mvvmdemo.utils.viewBinding
 import io.lzyprime.mvvmdemo.viewmodels.ListPhotoViewModel
 
 class PhotoListFragment : Fragment(R.layout.fragment_photo_list) {
     private val model: ListPhotoViewModel by activityViewModels()
-    private lateinit var binding:FragmentPhotoListBinding
+    private val binding:FragmentPhotoListBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentPhotoListBinding.bind(view)
         binding.refreshBtn.setOnClickListener {
             model.refreshListPhotos()
         }

@@ -13,17 +13,17 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.lzyprime.mvvmdemo.databinding.ActivityMainBinding
+import io.lzyprime.mvvmdemo.utils.viewBinding
 import io.lzyprime.mvvmdemo.viewmodels.ListPhotoViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: ListPhotoViewModel by viewModels()
+    private val binding: ActivityMainBinding by viewBinding()
     private var loginSuccess = false
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
         val navHost = supportFragmentManager.findFragmentById(R.id.mainNavHost) as NavHostFragment

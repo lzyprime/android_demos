@@ -1,11 +1,11 @@
 # android navigation demo
 
-文章：[android navigation组件 (https://lzyprime.github.io/kotlin_android/android_navigation)](https://lzyprime.github.io/kotlin_android/android_navigation)
+文章：[android ViewBinding, DataBinding (https://lzyprime.github.io/kotlin_android/viewbinding_databinding)](https://lzyprime.github.io/kotlin_android/viewbinding_databinding)
 
 ```bash
-# android navigation demo
+# ViewBinding DataBinding
 # 仓库地址: https://github.com/lzyprime/android_demos
-# branch: navigation
+# branch: viewBinding
 
-git clone -b navigation https://github.com/lzyprime/android_demos
+git clone -b viewBinding https://github.com/lzyprime/android_demos
 ```
