@@ -1,20 +1,19 @@
-package io.lzyprime.mvvmdemo
+package io.lzyprime.mvvmdemo.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import io.lzyprime.mvvmdemo.R
 import io.lzyprime.mvvmdemo.databinding.ActivityMainBinding
 import io.lzyprime.mvvmdemo.utils.viewBinding
-import io.lzyprime.mvvmdemo.viewmodels.ListPhotoViewModel
+import io.lzyprime.mvvmdemo.viewmodel.ListPhotoViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

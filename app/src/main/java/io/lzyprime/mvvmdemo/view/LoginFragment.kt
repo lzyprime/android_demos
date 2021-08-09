@@ -1,14 +1,15 @@
-package io.lzyprime.mvvmdemo
+package io.lzyprime.mvvmdemo.view
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import io.lzyprime.mvvmdemo.R
 import io.lzyprime.mvvmdemo.databinding.FragmentLoginBinding
 import io.lzyprime.mvvmdemo.utils.Net
 import io.lzyprime.mvvmdemo.utils.toast
 import io.lzyprime.mvvmdemo.utils.viewBinding
-import io.lzyprime.mvvmdemo.viewmodels.ListPhotoViewModel
+import io.lzyprime.mvvmdemo.viewmodel.ListPhotoViewModel
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private val viewModel: ListPhotoViewModel by activityViewModels()

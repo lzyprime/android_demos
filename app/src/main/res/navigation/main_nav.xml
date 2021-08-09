@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="io.lzyprime.mvvmdemo.LoginFragment"
+        android:name="io.lzyprime.mvvmdemo.view.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/photoListFragment"
-        android:name="io.lzyprime.mvvmdemo.PhotoListFragment"
+        android:name="io.lzyprime.mvvmdemo.view.PhotoListFragment"
         android:label="fragment_photo_list"
         tools:layout="@layout/fragment_photo_list" >
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="io.lzyprime.mvvmdemo.DetailFragment"
+        android:name="io.lzyprime.mvvmdemo.view.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
         <argument

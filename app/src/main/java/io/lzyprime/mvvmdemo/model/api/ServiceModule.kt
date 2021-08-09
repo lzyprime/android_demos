@@ -1,4 +1,4 @@
-package io.lzyprime.mvvmdemo.data.api
+package io.lzyprime.mvvmdemo.model.api
 
 import dagger.Module
 import dagger.Provides

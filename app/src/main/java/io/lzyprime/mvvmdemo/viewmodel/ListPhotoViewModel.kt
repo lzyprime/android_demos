@@ -1,12 +1,12 @@
-package io.lzyprime.mvvmdemo.viewmodels
+package io.lzyprime.mvvmdemo.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.lzyprime.mvvmdemo.data.UnsplashRepository
-import io.lzyprime.mvvmdemo.data.bean.Photo
-import io.lzyprime.mvvmdemo.data.bean.Response
+import io.lzyprime.mvvmdemo.model.UnsplashRepository
+import io.lzyprime.mvvmdemo.model.bean.Photo
+import io.lzyprime.mvvmdemo.model.bean.Response
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

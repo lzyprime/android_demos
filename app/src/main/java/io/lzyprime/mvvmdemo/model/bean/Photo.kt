@@ -1,4 +1,4 @@
-package io.lzyprime.mvvmdemo.data.bean
+package io.lzyprime.mvvmdemo.model.bean
 
 data class Photo(
     val id: String,

@@ -1,6 +1,6 @@
-package io.lzyprime.mvvmdemo.data.api
+package io.lzyprime.mvvmdemo.model.api
 
-import io.lzyprime.mvvmdemo.data.bean.Photo
+import io.lzyprime.mvvmdemo.model.bean.Photo
 import retrofit2.http.GET
 
 interface UnsplashService {

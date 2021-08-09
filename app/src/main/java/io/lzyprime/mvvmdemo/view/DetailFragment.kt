@@ -1,10 +1,11 @@
-package io.lzyprime.mvvmdemo
+package io.lzyprime.mvvmdemo.view
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import io.lzyprime.mvvmdemo.R
 import io.lzyprime.mvvmdemo.databinding.FragmentDetailBinding
 import io.lzyprime.mvvmdemo.utils.viewBinding
 

@@ -1,4 +1,4 @@
-package io.lzyprime.mvvmdemo
+package io.lzyprime.mvvmdemo.view
 
 import android.os.Bundle
 import android.view.View
@@ -10,9 +10,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import io.lzyprime.mvvmdemo.R
 import io.lzyprime.mvvmdemo.databinding.FragmentPhotoListBinding
 import io.lzyprime.mvvmdemo.utils.viewBinding
-import io.lzyprime.mvvmdemo.viewmodels.ListPhotoViewModel
+import io.lzyprime.mvvmdemo.viewmodel.ListPhotoViewModel
 
 class PhotoListFragment : Fragment(R.layout.fragment_photo_list) {
     private val model: ListPhotoViewModel by activityViewModels()

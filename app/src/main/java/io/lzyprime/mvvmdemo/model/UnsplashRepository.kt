@@ -1,7 +1,7 @@
-package io.lzyprime.mvvmdemo.data
+package io.lzyprime.mvvmdemo.model
 
-import io.lzyprime.mvvmdemo.data.api.UnsplashService
-import io.lzyprime.mvvmdemo.data.bean.Response
+import io.lzyprime.mvvmdemo.model.api.UnsplashService
+import io.lzyprime.mvvmdemo.model.bean.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
