@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="userId">用户名</string>
+    <string name="login">登录</string>
+    <string name="generate_sig_failed">生成sig失败</string>
+    <string name="kicked_offline">被踢下线</string>
+    <string name="sig_expired">sig 过期</string>
+    <string name="re_enter_toast_press_again_to_exit">再按一次退出</string>
+    <string name="add_contact">添加好友</string>
+</resources>

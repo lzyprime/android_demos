@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.lzyprime.definitely">
+    package="io.lzyprime.definitelyCompose">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-
     <application
-        android:name=".UnsplashApplication"
+        android:name=".UnsplashComposeApplication"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/compose_app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/Theme.Definitely"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Definitely">
 
         <activity
-            android:theme="@style/Theme.Definitely.Fullscreen"
-            android:name="io.lzyprime.definitely.MainActivity"
+            android:name=".ComposeMainActivity"
+            android:exported="true"
             android:launchMode="singleTop"
-            android:exported="true">
+            android:theme="@style/Theme.Definitely.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

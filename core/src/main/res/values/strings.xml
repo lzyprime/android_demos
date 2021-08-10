@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name" translatable="false">Definitely</string>
+    <string name="compose_app_name" translatable="false">Definitely Compose</string>
+    <string name="userId">user id</string>
+    <string name="login">Login</string>
+    <string name="generate_sig_failed">generate sig failed</string>
+    <string name="kicked_offline">kicked offline</string>
+    <string name="sig_expired">sig expired</string>
+    <string name="re_enter_toast_press_again_to_exit">Press again to exit</string>
+    <string name="add_contact">Add Contact</string>
+</resources>
