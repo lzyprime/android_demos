@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/mainNavFragment">
+
+    <fragment
+        android:id="@+id/mainNavFragment"
+        android:name="io.lzyprime.bottomnavigation.MainNavFragment"
+        android:label="MainNavFragment" >
+        <action
+            android:id="@+id/action_mainNavFragment_to_secondaryNavFragment"
+            app:destination="@id/secondaryNavFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/secondaryNavFragment"
+        android:name="io.lzyprime.bottomnavigation.SecondaryNavFragment"
+        android:label="SecondaryNavFragment" />
+</navigation>
