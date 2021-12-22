@@ -9,7 +9,7 @@ android {
     compileSdk = 31
 
     defaultConfig {
-        minSdk = 26
+        minSdk = 28
         targetSdk = 30
     }
 
@@ -23,17 +23,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
     val retrofitVersion: String by rootProject.extra
-    val imSDKVersion: String by rootProject.extra
     val publicDependencies: List<String> by rootProject.extra
     val publicKapt: List<String> by rootProject.extra
 
