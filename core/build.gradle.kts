@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         minSdk = 26
-        targetSdk = 30
+        targetSdk = 31
     }
 
     buildTypes {
@@ -33,7 +33,6 @@ android {
 
 dependencies {
     val retrofitVersion: String by rootProject.extra
-    val imSDKVersion: String by rootProject.extra
     val publicDependencies: List<String> by rootProject.extra
     val publicKapt: List<String> by rootProject.extra
 
@@ -44,6 +43,10 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 
-    // im sdk
-    implementation("com.tencent.imsdk:imsdk-plus:$imSDKVersion")
+    //ktor-client
+    val ktorVersion = "1.6.7"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+    implementation("io.ktor:ktor-client-gson:$ktorVersion")
+
 }

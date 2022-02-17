@@ -4,60 +4,54 @@
 
     <data>
 
-        <import
-            alias="LoginState"
-            type="io.lzyprime.core.model.bean.IMLoginState" />
-
-        <variable
-            name="model"
-            type="io.lzyprime.definitely.login.LoginFragment.Model" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/bg_launcher"
         android:fitsSystemWindows="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_launcher"
-            android:fitsSystemWindows="true">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fitsSystemWindows="true"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_logo" />
 
-            <EditText
-                android:id="@+id/editUserId"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80dp"
-                android:ems="10"
-                android:hint="@string/userId"
-                android:inputType="textPersonName"
-                android:singleLine="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                android:maxWidth="400dp"
+                android:minWidth="200dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/userCodeEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/user_code"
+                    android:inputType="textPersonName"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/loginBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:enabled="@{editUserId.text.length() > 0 &amp;&amp; model.loginState instanceof LoginState.Logout}"
-                android:onClickListener="@{model.onClickLogin}"
-                android:text="@string/login"
-                app:layout_constraintEnd_toEndOf="@+id/editUserId"
-                app:layout_constraintStart_toStartOf="@+id/editUserId"
-                app:layout_constraintTop_toBottomOf="@+id/editUserId" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginBottom="100dp"
+                android:enabled="@{userCodeEditText.text.length() > 0}"
+                android:text="@string/login" />
+        </LinearLayout>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

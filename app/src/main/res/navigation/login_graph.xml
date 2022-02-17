@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="io.lzyprime.definitely.login.LoginFragment"
+        android:name="io.lzyprime.definitely.ui.login.LoginFragment"
         android:label="LoginFragment" />
 </navigation>

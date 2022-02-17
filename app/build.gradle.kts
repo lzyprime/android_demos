@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId = "io.lzyprime.definitely"
         minSdk = 26
-        targetSdk = 30
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0"
     }

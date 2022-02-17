@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/conversationFragment"
-        android:icon="@drawable/ic_message" />
+        android:id="@+id/photoList"
+        android:icon="@drawable/ic_photo_library" />
     <item
-        android:id="@+id/contactFragment"
-        android:icon="@drawable/ic_contacts" />
+        android:id="@+id/me"
+        android:icon="@drawable/ic_person" />
 </menu>

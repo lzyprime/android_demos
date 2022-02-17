@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId = "io.lzyprime.definitelyCompose"
         minSdk = 26
-        targetSdk = 30
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0"
     }
@@ -60,8 +60,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01")
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha09")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
+    implementation("androidx.navigation:navigation-compose:2.4.0-rc01")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-rc01")
     implementation("io.coil-kt:coil-compose:$coilVersion")
 }

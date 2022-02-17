@@ -22,3 +22,12 @@ fun viewBackgroundColor(v: View, @AttrRes colorResId: Int) {
 fun imageViewLoadAny(v: ImageView, src: Any?) {
     v.loadAny(src)
 }
+
+@BindingAdapter(value = ["isGone"])
+fun viewIsGone(v:View, isGone: Boolean?) {
+    v.visibility = if(isGone == true) {
+        View.GONE
+    } else {
+        View.VISIBLE
+    }
+}

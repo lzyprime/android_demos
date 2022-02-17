@@ -6,7 +6,6 @@
 
     <fragment
         android:id="@+id/mainNavFragment"
-        android:name="io.lzyprime.definitely.main.MainNavFragment"
+        android:name="io.lzyprime.definitely.ui.main.MainNavFragment"
         android:label="MainNavFragment" />
-    <include app:graph="@navigation/login_graph" />
 </navigation>
