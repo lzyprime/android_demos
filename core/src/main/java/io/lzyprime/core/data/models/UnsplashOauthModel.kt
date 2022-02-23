@@ -1,6 +1,6 @@
-package io.lzyprime.core.data.models.unsplash
+package io.lzyprime.core.data.models
 
-data class UnsplashOauth(
+data class UnsplashOauthModel(
     val access_token: String,
     val token_type: String,
     val scope: String,

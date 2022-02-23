@@ -4,15 +4,14 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.lzyprime.core.data.sources.KtorUnsplashDataSource
-import io.lzyprime.core.data.sources.UnsplashDataSource
+import io.lzyprime.core.data.sources.api.UnsplashService
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ServerModule {
+object UnsplashModule {
 
     @Provides
     @Singleton
-    fun provideUnsplashSource(): UnsplashDataSource = KtorUnsplashDataSource() // or RetrofitUnsplashDataSource()
+    fun provideUnsplashSource(): UnsplashService = UnsplashService.withKtor()
 }

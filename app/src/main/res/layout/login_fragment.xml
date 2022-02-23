@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="io.lzyprime.core.data.models.LoginState"/>
+        <variable
+            name="loginState"
+            type="kotlinx.coroutines.flow.StateFlow&lt;LoginState>" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -49,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="100dp"
-                android:enabled="@{userCodeEditText.text.length() > 0}"
+                android:enabled="@{userCodeEditText.text.length() > 0 &amp;&amp; loginState instanceof LoginState.NotLogin}"
                 android:text="@string/login" />
         </LinearLayout>
 

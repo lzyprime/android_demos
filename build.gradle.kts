@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     val hiltVersion by extra("2.38.1")
-    val navVersion by extra("2.3.5")
+    val navVersion by extra("2.4.1")
     val lifecycleVersion by extra("2.3.1")
     extra["retrofitVersion"] = "2.9.0"
     extra["composeVersion"] = "1.0.3"

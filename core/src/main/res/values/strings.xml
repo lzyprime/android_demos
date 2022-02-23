@@ -7,4 +7,5 @@
     <string name="id" translatable="false">ID: %s</string>
 
     <string name="re_enter_press_again_to_exit">Press again to exit</string>
+    <string name="settings">Settings</string>
 </resources>

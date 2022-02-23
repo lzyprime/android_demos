@@ -27,7 +27,6 @@
     </style>
 
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="background">@drawable/bg_launcher</item>
         <item name="android:textAppearance">?attr/textAppearanceBody2</item>
     </style>
 </resources>

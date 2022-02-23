@@ -1,6 +1,6 @@
-package io.lzyprime.core.data.models.unsplash
+package io.lzyprime.core.data.models
 
-data class UnsplashUser(
+data class UnsplashUserModel(
     val id: String,
 //    val uid: String, // id == uid
     val username: String,
@@ -21,19 +21,8 @@ data class UnsplashUser(
     val downloads: Int,
     val uploads_remaining: Int,
 
-    val links: Links,
     val profile_image: ProfileImage,
-
 ) {
-    data class Links(
-        val followers: String,
-        val following: String,
-        val html: String,
-        val likes: String,
-        val photos: String,
-        val portfolio: String,
-        val self: String
-    )
 
     data class ProfileImage(
         val large: String,
