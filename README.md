@@ -5,7 +5,7 @@
 post: [android navigation组件](https://lzyprime.github.io/kotlin_android/android_navigation)
 
 ```bash
-# 仓库地址: https://github.com/lzyprime/android_demos
+# 仓库地址: https://github.com/lzyprime/android_demos/tree/navigation
 
 git clone -b navigation https://github.com/lzyprime/android_demos
 ```
