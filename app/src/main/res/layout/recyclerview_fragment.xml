@@ -6,8 +6,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:spanCount="1"
+        android:orientation="vertical"
         android:labelFor="@id/addItemBtn"
         android:background="?attr/backgroundColor"
         android:layout_width="match_parent"

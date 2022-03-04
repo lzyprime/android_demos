@@ -9,14 +9,13 @@ import androidx.viewbinding.ViewBinding
 
 inline fun <reified T> diffItemCallback(
     crossinline areItemsTheSame: (oldItem: T, newItem: T) -> Boolean,
-    crossinline areContentsTheSame: (oldItem: T, newItem: T) -> Boolean,
+    crossinline areContentsTheSame: (oldItem: T, newItem: T) -> Boolean = { o, n -> o == n },
 ) = object : DiffUtil.ItemCallback<T>() {
     override fun areItemsTheSame(oldItem: T, newItem: T): Boolean =
         areItemsTheSame(oldItem, newItem)
 
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean =
         areContentsTheSame(oldItem, newItem)
-
 }
 
 data class BindingViewHolder<VB : ViewBinding>(val binding: VB) :

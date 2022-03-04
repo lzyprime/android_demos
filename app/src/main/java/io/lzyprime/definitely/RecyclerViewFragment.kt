@@ -8,10 +8,13 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.View
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import io.lzyprime.definitely.databinding.ListItemHeaderBinding
 import io.lzyprime.definitely.databinding.ListItemSingleLineTextBinding
 import io.lzyprime.definitely.databinding.RecyclerviewFragmentBinding
 import io.lzyprime.definitely.utils.diffItemCallback
@@ -22,32 +25,31 @@ import kotlin.math.abs
 
 sealed class RecyclerViewFragment : Fragment(R.layout.recyclerview_fragment) {
     protected val binding by viewBinding<RecyclerviewFragmentBinding>()
-    private var itemCount = 3
-    protected val adapter = dslBindingListAdapter<String, ListItemSingleLineTextBinding>(
-        diffItemCallback(
-            { o, n -> o == n },
-            { o, n -> o == n },
-        ),
-    ) { _, data ->
-        titleText.text = data
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        adapter.submitList((0 until itemCount).map { "Item $it" })
-        binding.list.adapter = adapter
-        binding.addItemBtn.setOnClickListener {
-            onClickAddBtn()
-        }
-    }
+    private var showHelp = true
+    protected abstract val helpMsg: String
 
-    protected open fun onClickAddBtn() {
-        adapter.submitList(adapter.currentList + "Item ${itemCount++}")
+    override fun onResume() {
+        super.onResume()
+
+        if (!showHelp) return
+        binding.root.snackBar(helpMsg, Snackbar.LENGTH_INDEFINITE)
+            .setAction("ok") {
+                showHelp = false
+            }.show()
     }
 }
 
 class SwipeListFragment : RecyclerViewFragment() {
-    private val swipeCallback = object : ItemTouchHelper.SimpleCallback(
+    override val helpMsg = "左右滑动删除Item, 震动和半透明提示. 长按拖动, 更换位置"
+
+    private var itemCount = 3
+    private val adapter = dslBindingListAdapter<String, ListItemSingleLineTextBinding>(
+        diffItemCallback({ o, n -> o == n }),
+    ) { _, data ->
+        titleText.text = data
+    }
+    private val itemTouchCallback = object : ItemTouchHelper.SimpleCallback(
         ItemTouchHelper.UP or ItemTouchHelper.DOWN,
         ItemTouchHelper.START or ItemTouchHelper.END,
     ) {
@@ -56,8 +58,8 @@ class SwipeListFragment : RecyclerViewFragment() {
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-            val from = viewHolder.adapterPosition
-            val to = target.adapterPosition
+            val from = viewHolder.absoluteAdapterPosition
+            val to = target.absoluteAdapterPosition
             val newList = adapter.currentList.toMutableList()
             newList.add(to, newList.removeAt(from))
             adapter.submitList(newList)
@@ -68,9 +70,9 @@ class SwipeListFragment : RecyclerViewFragment() {
             AlertDialog.Builder(viewHolder.itemView.context)
                 .setTitle(if (direction == ItemTouchHelper.START) "start" else "end")
                 .setPositiveButton("remove") { _, _ ->
-                    adapter.submitList(adapter.currentList - adapter.currentList[viewHolder.adapterPosition])
+                    adapter.submitList(adapter.currentList - adapter.currentList[viewHolder.bindingAdapterPosition])
                 }.setNegativeButton("cancel") { _, _ ->
-                    adapter.notifyItemChanged(viewHolder.adapterPosition)
+                    adapter.notifyItemChanged(viewHolder.bindingAdapterPosition)
                 }.show()
 
         }
@@ -115,17 +117,32 @@ class SwipeListFragment : RecyclerViewFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.list)
+        adapter.submitList((0 until itemCount).map { "Item $it" })
+        binding.list.adapter = adapter
+        binding.addItemBtn.setOnClickListener {
+            adapter.submitList(adapter.currentList + "Item ${itemCount++}")
+        }
+        ItemTouchHelper(itemTouchCallback).attachToRecyclerView(binding.list)
     }
+}
 
-    private var showHelp = true
-    override fun onResume() {
-        super.onResume()
+class ConcatAdapterFragment : RecyclerViewFragment() {
+    override val helpMsg: String = "利用 ConcatAdapter 实现 RecyclerView.Adapter 拼接"
 
-        if (!showHelp) return
-        binding.root.snackBar("左右滑动删除Item, 震动和半透明提示. 长按拖动, 更换位置", Snackbar.LENGTH_INDEFINITE)
-            .setAction("ok") {
-                showHelp = false
-            }.show()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.addItemBtn.isGone = true
+        val adapters = (1..5).flatMap {
+            listOf(
+                dslBindingListAdapter<String, ListItemHeaderBinding>(diffItemCallback({ o, n -> o == n })) { _, data ->
+                    titleText.text = data
+                }.apply { submitList(listOf("header $it")) },
+                dslBindingListAdapter<String, ListItemSingleLineTextBinding>(diffItemCallback({ o, n -> o == n })) { _, data ->
+                    titleText.text = data
+                }.apply { submitList((1..10).map { i -> "item $it $i" }) }
+            )
+        }
+
+        binding.list.adapter = ConcatAdapter(adapters)
     }
 }

@@ -56,4 +56,5 @@ dependencies {
     // Coil图片展示
     implementation("io.coil-kt:coil:$coilVersion")
 
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
 }
