@@ -1,0 +1,30 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.Definitely" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/pin_lan</item>
+        <item name="colorPrimaryVariant">@color/pin_lan_variant</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/pin_hong</item>
+        <item name="colorSecondaryVariant">@color/pin_hong_variant</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+
+        <!-- Customize your theme here. -->
+        <item name="backgroundColor">@color/qian_shi_bai</item>
+        <item name="titleTextColor">@color/luan_shi_zi</item>
+
+        <!-- public -->
+        <item name="textInputOutlinedStyle">@style/Theme.Definitely.TextInputEditLayout</item>
+        <item name="textInputStyle">?attr/textInputOutlinedStyle</item>
+    </style>
+
+    <style name="Theme.Definitely.Fullscreen" parent="Theme.Definitely">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/full_screen_splash</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+</resources>

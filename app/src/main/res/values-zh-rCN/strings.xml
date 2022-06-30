@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">登录</string>
+    <string name="re_enter_press_again_to_exit">再按一次退出</string>
+    <string name="settings">设置</string>
+    <string name="msg_token_expired">登录已过期</string>
+    <string name="enter">确认</string>
+    <string name="cancel">取消</string>
+    <string name="re_enter_ignore_changes_and_exit">放弃修改并退出</string>
+    <string name="nickname">昵称</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="secrecy">保密</string>
+    <string name="submit">提交</string>
+    <string name="from_camera">相机</string>
+    <string name="from_file">文件</string>
+</resources>

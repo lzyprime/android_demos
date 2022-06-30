@@ -1,0 +1,20 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.Definitely" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/yan_lan</item>
+        <item name="colorPrimaryVariant">@color/yan_lan</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/he_huan_hong</item>
+        <item name="colorSecondaryVariant">@color/he_huan_hong_variant</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+
+        <!-- Customize your theme here. -->
+        <item name="backgroundColor">@color/luan_shi_zi</item>
+        <item name="titleTextColor">@color/qian_shi_bai</item>
+    </style>
+</resources>

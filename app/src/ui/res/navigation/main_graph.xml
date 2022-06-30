@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/mainNavFragment">
+
+    <fragment
+        android:id="@+id/mainNavFragment"
+        android:name="io.lzyprime.definitely.ui.main.MainNavFragment"
+        android:label="MainNavFragment" />
+    <fragment
+        android:id="@+id/updateUserInfoFragment"
+        android:name="io.lzyprime.definitely.ui.login.UpdateUserInfoFragment"
+        android:label="UpdateUserInfoFragment"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="io.lzyprime.definitely.ui.login.LoginFragment"
+        android:label="LoginFragment" />
+</navigation>

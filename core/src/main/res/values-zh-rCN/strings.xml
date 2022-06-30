@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="login">登录</string>
-    <string name="re_enter_press_again_to_exit">再按一次退出</string>
-    <string name="settings">设置</string>
-</resources>

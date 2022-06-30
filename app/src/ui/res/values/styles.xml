@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CircleShape">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="Theme.Definitely.TextInputEditLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:minEms">12</item>
+    </style>
+</resources>
