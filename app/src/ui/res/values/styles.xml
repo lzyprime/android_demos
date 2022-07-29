@@ -5,7 +5,7 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="Theme.Definitely.TextInputEditLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+    <style name="Widget.Definitely.TextInputEditLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="android:minEms">12</item>
     </style>
 </resources>

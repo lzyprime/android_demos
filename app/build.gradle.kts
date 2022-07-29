@@ -1,15 +1,15 @@
 val navVersion: String by rootProject.extra
 val hiltVersion: String by rootProject.extra
 val useCompose: Boolean by rootProject.extra
-val lifecycleVersion = "2.5.0"
+val lifecycleVersion = "2.5.1"
 val composeVersion = "1.1.1"
-val activityVersion = "1.4.0"
+val activityVersion = "1.5.1"
 
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("dagger.hilt.android.plugin")
+    id("com.google.dagger.hilt.android")
 }
 
 if (!useCompose) {
