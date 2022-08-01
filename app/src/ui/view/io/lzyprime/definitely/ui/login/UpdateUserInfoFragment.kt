@@ -5,14 +5,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,14 +17,13 @@ import io.lzyprime.definitely.databinding.UpdateUserinfoFragmentBinding
 import io.lzyprime.definitely.ui.dialogs.SelectListDialog
 import io.lzyprime.definitely.ui.utils.*
 import io.lzyprime.definitely.utils.PermissionState
+import io.lzyprime.definitely.utils.launchWithRepeat
 import io.lzyprime.definitely.utils.registerCheckPermissionLauncher
 import io.lzyprime.definitely.utils.toByteArray
 import io.lzyprime.definitely.viewmodel.UpdateUserInfoViewModel
 import io.lzyprime.svr.model.Gender
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import java.io.File
 
 @AndroidEntryPoint
 class UpdateUserInfoFragment : Fragment(R.layout.update_userinfo_fragment) {

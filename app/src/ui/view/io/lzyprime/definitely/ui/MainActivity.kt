@@ -7,6 +7,8 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
 import dagger.hilt.android.AndroidEntryPoint
 import io.lzyprime.definitely.R
 import io.lzyprime.definitely.databinding.MainActivityBinding
@@ -32,6 +34,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_Definitely)
+        DynamicColors.applyToActivityIfAvailable(this)
+
         setContentView(binding.root)
 
         onBackPressedDispatcher.addCallback {

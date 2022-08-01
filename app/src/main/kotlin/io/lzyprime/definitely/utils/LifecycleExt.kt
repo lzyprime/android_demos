@@ -1,4 +1,4 @@
-package io.lzyprime.definitely.ui.utils
+package io.lzyprime.definitely.utils
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner

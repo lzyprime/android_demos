@@ -1,12 +1,10 @@
 package io.lzyprime.definitely.viewmodel
 
-import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.lzyprime.definitely.data.UserRepository
 import io.lzyprime.definitely.data.di.IODispatcher
-import io.lzyprime.definitely.utils.toByteArray
 import io.lzyprime.svr.model.Gender
 import io.lzyprime.svr.model.LoginState
 import kotlinx.coroutines.CoroutineDispatcher
