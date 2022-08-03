@@ -95,6 +95,8 @@ dependencies {
         implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
 
         implementation("androidx.navigation:navigation-compose:$navVersion")
+        // permission request
+        implementation("com.google.accompanist:accompanist-permissions:0.26.0-alpha")
     } else {
         implementation("androidx.appcompat:appcompat:1.4.2")
         implementation("androidx.activity:activity-ktx:$activityVersion")

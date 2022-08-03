@@ -25,6 +25,16 @@ data class UserInfoUiState(
             avatar.isNotBlank() && nickname.isNotBlank() && gender != Gender.Unknown && !loading
 }
 
+sealed interface UserInfoUiEvent {
+    @JvmInline
+    value class UpdateNickname(val nickname: String):UserInfoUiEvent
+    @JvmInline
+    value class UpdateGender(val gender: Gender):UserInfoUiEvent
+    @JvmInline
+    value class UpdateAvatar(val byteArray: ByteArray):UserInfoUiEvent
+    object UpdateUserInfo:UserInfoUiEvent
+}
+
 @HiltViewModel
 class UpdateUserInfoViewModel @Inject constructor(
     private val userRepository: UserRepository,
@@ -48,15 +58,22 @@ class UpdateUserInfoViewModel @Inject constructor(
         return _userInfoUiState.value
     }
 
-    fun updateNickname(v: String) {
+    fun emitEvent(event: UserInfoUiEvent) = when(event) {
+        is UserInfoUiEvent.UpdateNickname-> updateNickname(event.nickname)
+        is UserInfoUiEvent.UpdateAvatar -> updateAvatar(event.byteArray)
+        is UserInfoUiEvent.UpdateGender -> updateGender(event.gender)
+        UserInfoUiEvent.UpdateUserInfo -> updateUserInfo()
+    }
+
+    private fun updateNickname(v: String) {
         _userInfoUiState.update { it.copy(nickname = v) }
     }
 
-    fun updateGender(v: Gender) {
+    private fun updateGender(v: Gender) {
         _userInfoUiState.update { it.copy(gender = v) }
     }
 
-    fun updateUserInfo() {
+    private fun updateUserInfo() {
         val nickname = _userInfoUiState.value.nickname
         val gender = _userInfoUiState.value.gender
         if (nickname.isNotBlank() && gender != Gender.Unknown) {
@@ -68,7 +85,7 @@ class UpdateUserInfoViewModel @Inject constructor(
         }
     }
 
-    fun updateAvatar(byteArray: ByteArray) {
+    private fun updateAvatar(byteArray: ByteArray) {
         _userInfoUiState.update { it.copy(updatingAvatar = true) }
         viewModelScope.launch(ioDispatcher) {
             userRepository.updateAvatar(byteArray).onSuccess { userInfo ->

@@ -12,7 +12,7 @@ interface SvrService {
     val fileService: FileService
 
     companion object {
-        internal const val BASE_URL = "http://10.81.74.42:8080"
+        internal const val BASE_URL = "http://10.81.31.15:8080"
         operator fun invoke(tokenStorage: TokenStorage): SvrService =
             SvrServiceImpl(tokenStorage)
     }

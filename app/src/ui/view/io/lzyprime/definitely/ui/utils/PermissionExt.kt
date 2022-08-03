@@ -1,4 +1,4 @@
-package io.lzyprime.definitely.utils
+package io.lzyprime.definitely.ui.utils
 
 import android.content.pm.PackageManager
 import androidx.activity.result.ActivityResultCallback
