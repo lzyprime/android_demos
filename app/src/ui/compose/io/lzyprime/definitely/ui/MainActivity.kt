@@ -3,17 +3,21 @@ package io.lzyprime.definitely.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.AndroidEntryPoint
 import io.lzyprime.definitely.R
 import io.lzyprime.definitely.ui.login.LoginContent
@@ -30,51 +34,55 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val userViewModel by viewModels<UserViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DynamicColors.applyToActivityIfAvailable(this)
         lifecycleScope.launchWhenCreated {
             val state = userViewModel.loginState.filter { it != LoginState.Loading }.first()
-            setContent {
-                MainContent(state = state)
-            }
+            initContent(state)
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    private fun MainContent(state: LoginState) {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+    private fun initContent(state: LoginState) = setContent {
+        val windowSizeClass = calculateWindowSizeClass(activity = this)
         var loginState by remember { mutableStateOf(state) }
-        val snackBarHostState = remember { SnackbarHostState() }
-        val scope = rememberCoroutineScope()
-
         launchWithRepeat {
             userViewModel.loginState.filter { it != LoginState.Loading }.collectLatest {
                 loginState = it
             }
         }
+        MainContent(loginState, windowSizeClass)
+    }
 
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun MainContent(loginState:LoginState, windowSizeClass: WindowSizeClass) {
+        val snackBarHostState = remember { SnackbarHostState() }
         val reEnterExit = stringResource(id = R.string.re_enter_press_again_to_exit)
-        onBackPressedDispatcher.addCallback {
-            if (snackBarHostState.currentSnackbarData != null)
-                finish()
-            else
-                scope.launch { snackBarHostState.showSnackbar(reEnterExit) }
-        }
 
+        val scope = rememberCoroutineScope()
+        BackHandler {
+            if(snackBarHostState.currentSnackbarData != null) finish() else scope.launch {
+                snackBarHostState.showSnackbar(reEnterExit)
+            }
+        }
         DefinitelyTheme {
             Scaffold(
                 snackbarHost = {
                     SnackbarHost(hostState = snackBarHostState)
                 },
-            ) {
-                when (val cur = loginState) {
-                    is LoginState.LoginUserInfo -> if (cur.needComplete) {
-                        UpdateUserInfoContent()
-                    } else {
-                        MainNavHost()
+            ) { padding ->
+                Box(Modifier.padding(padding)) {
+                    when (loginState) {
+                        is LoginState.LoginUserInfo -> if (loginState.needComplete) {
+                            UpdateUserInfoContent()
+                        } else {
+                            MainNavHost()
+                        }
+                        else -> LoginContent()
                     }
-                    else -> LoginContent()
                 }
             }
         }

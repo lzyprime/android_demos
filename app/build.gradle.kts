@@ -1,9 +1,9 @@
 val navVersion: String by rootProject.extra
 val hiltVersion: String by rootProject.extra
 val useCompose: Boolean by rootProject.extra
-val lifecycleVersion = "2.5.1"
-val composeVersion = "1.2.0"
-val activityVersion = "1.5.1"
+val lifecycleVersion: String by rootProject.extra
+val composeVersion: String by rootProject.extra
+val activityVersion: String by rootProject.extra
 
 plugins {
     id("com.android.application")
@@ -81,7 +81,6 @@ dependencies {
     implementation(project(":svr"))
 
     implementation("androidx.core:core-ktx:1.8.0")
-    implementation("com.google.android.material:material:1.6.1")
 
     if (useCompose) {
         implementation("androidx.activity:activity-compose:$activityVersion")
@@ -100,6 +99,7 @@ dependencies {
     } else {
         implementation("androidx.appcompat:appcompat:1.4.2")
         implementation("androidx.activity:activity-ktx:$activityVersion")
+        implementation("com.google.android.material:material:1.6.1")
         implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
         implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")

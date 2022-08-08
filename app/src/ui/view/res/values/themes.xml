@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Definitely" parent="Theme.Material3.DayNight.NoActionBar">
         <!--        <item name="colorPrimary">@color/md_theme_light_primary</item>-->
@@ -32,10 +33,4 @@
         <item name="textInputOutlinedStyle">@style/Widget.Definitely.TextInputLayout.OutlinedBox</item>
         <item name="textInputStyle">?attr/textInputOutlinedStyle</item>
     </style>
-
-    <style name="Widget.Definitely.TextInputLayout.OutlinedBox" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="android:minWidth">280dp</item>
-        <item name="android:minHeight">56dp</item>
-    </style>
-
 </resources>
