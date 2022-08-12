@@ -6,43 +6,44 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.cookies.*
+import io.ktor.client.plugins.websocket.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.lzyprime.svr.SvrService
 import io.lzyprime.svr.model.Failed
-import io.lzyprime.svr.model.LoginState
 import io.lzyprime.svr.model.StateAndEvent
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
-internal class KtorClient(tokenStorage: SvrService.TokenStorage) {
+internal class KtorClient(reqTimeout: Duration?) {
     companion object {
-        private const val cookieName = "auth_code"
-        private const val timeout = 5L // 5s
-        private val timeUnit = TimeUnit.SECONDS // s
+        private val DefaultReqTimeout = Duration.ofSeconds(5) // 5s
+        private const val COOKIE_NAME = "auth_code"
+    }
+
+    private data class CookieStorageWithToken(var token: String = "") : CookiesStorage {
+        override suspend fun addCookie(requestUrl: Url, cookie: Cookie) {
+            if (cookie.name == COOKIE_NAME && token != cookie.value) {
+                token = cookie.value
+            }
+        }
+
+        override fun close() {}
+
+        override suspend fun get(requestUrl: Url): List<Cookie> =
+            if (token.isBlank())
+                emptyList()
+            else
+                listOf(Cookie(COOKIE_NAME, token))
+    }
+
+    private val cookieStorageWithToken = CookieStorageWithToken()
+    var token get() = cookieStorageWithToken.token
+    set(value) {
+        cookieStorageWithToken.token = token
     }
 
     val stateAndEvent = StateAndEvent()
-
-    private val cookiesStorage = object : CookiesStorage {
-        private var cache: String? = null
-        override suspend fun addCookie(requestUrl: Url, cookie: Cookie) {
-            if (cookie.name == cookieName && cache != cookie.value) {
-                tokenStorage.setToken(cookie.value)
-                cache = cookie.value
-            }
-        }
-
-        override suspend fun get(requestUrl: Url): List<Cookie> =
-            when (val token = cache ?: tokenStorage.getToken().also { cache = it }) {
-                "" -> emptyList()
-                else -> listOf(Cookie(name = cookieName, value = token))
-            }
-
-        override fun close() {
-            cache = null
-        }
-    }
 
     private val client by lazy {
         HttpClient(OkHttp) {
@@ -51,12 +52,7 @@ internal class KtorClient(tokenStorage: SvrService.TokenStorage) {
             }
             engine {
                 config {
-                    callTimeout(timeout, timeUnit)
-                    addInterceptor {
-                        val req = it.request()
-                        println(req.url)
-                        it.proceed(req)
-                    }
+                    callTimeout(reqTimeout ?: DefaultReqTimeout)
                 }
             }
             defaultRequest {
@@ -64,12 +60,10 @@ internal class KtorClient(tokenStorage: SvrService.TokenStorage) {
                 contentType(ContentType.Application.Json)
             }
             install(HttpCookies) {
-                storage = cookiesStorage
+                storage = cookieStorageWithToken
             }
         }
     }
-
-    suspend fun isTokenExisted() = cookiesStorage.get(Url("")).isNotEmpty()
 
     suspend inline fun <reified T> doRequest(reqBlock: HttpClient.() -> HttpResponse): Result<T> =
         try {
@@ -81,12 +75,7 @@ internal class KtorClient(tokenStorage: SvrService.TokenStorage) {
                     Result.failure(Failed.ParseBodyFailed)
                 }
             } else {
-                Failed(rsp.status.value).let { f ->
-                    if (f is Failed.TokenExpired) {
-                        stateAndEvent.loginState.emit(LoginState.Logout(f))
-                    }
-                    Result.failure(f)
-                }
+                Result.failure(Failed(rsp.status.value))
             }
         } catch (e: Exception) {
             Result.failure(e)

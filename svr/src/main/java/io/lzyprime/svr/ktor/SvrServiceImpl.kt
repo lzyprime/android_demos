@@ -4,8 +4,7 @@ import io.lzyprime.svr.FileService
 import io.lzyprime.svr.SvrService
 import io.lzyprime.svr.UserService
 
-internal class SvrServiceImpl(tokenStorage: SvrService.TokenStorage) : SvrService {
-    private val client = KtorClient(tokenStorage)
+internal class SvrServiceImpl(private val client: KtorClient) : SvrService {
 
     override val userService: UserService by lazy {
         UserServiceImpl(client)

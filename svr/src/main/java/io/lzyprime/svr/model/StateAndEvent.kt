@@ -1,7 +1,7 @@
 package io.lzyprime.svr.model
 
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 internal class StateAndEvent {
-    val loginState = MutableSharedFlow<LoginState>(replay = 1)
+    val loginState = MutableStateFlow(LoginState.Logout)
 }

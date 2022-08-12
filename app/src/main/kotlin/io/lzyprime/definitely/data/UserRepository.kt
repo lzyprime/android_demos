@@ -1,26 +1,26 @@
 package io.lzyprime.definitely.data
 
-import io.lzyprime.definitely.data.di.ApplicationScope
+import io.lzyprime.definitely.data.perfs.UserLocalDataSource
 import io.lzyprime.svr.UserService
 import io.lzyprime.svr.model.Gender
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserRepository @Inject constructor(
-    @ApplicationScope private val scope: CoroutineScope,
+    private val userLocalDataSource: UserLocalDataSource,
     private val userService: UserService,
 ) {
-    init {
-        scope.launch { userService.checkLogin() }
-    }
 
     val loginState get() = userService.loginState
 
     suspend fun login(user: String, password: String) =
-        userService.login(user, password)
+        userService.login(user, password).map { (res, token) ->
+            userLocalDataSource.svrToken.update(token)
+            res
+        }
+    suspend fun autoLogin() = userService.login(userLocalDataSource.svrToken.first())
 
     suspend fun updateAvatar(fileByteArray: ByteArray) =
         userService.updateAvatar(fileByteArray)

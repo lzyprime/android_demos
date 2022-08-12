@@ -14,17 +14,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object SvrServiceModule {
-    @Provides
-    @Singleton
-    fun provideSvrService(userLocalDataSource: UserLocalDataSource): SvrService =
-        SvrService(tokenStorage = object : SvrService.TokenStorage {
-            override suspend fun getToken(): String =
-                userLocalDataSource.svrToken.first()
-
-            override suspend fun setToken(newToken: String) =
-                userLocalDataSource.svrToken.update(newToken)
-        })
+    private val svrService by lazy { SvrService() }
 
     @Provides
-    fun provideUserService(svrService: SvrService): UserService = svrService.userService
+    fun provideUserService(): UserService = svrService.userService
 }

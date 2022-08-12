@@ -43,21 +43,6 @@ class UpdateUserInfoViewModel @Inject constructor(
     private val _userInfoUiState = MutableStateFlow(UserInfoUiState())
     val userInfoUiState = _userInfoUiState.asStateFlow()
 
-    suspend fun initData(): UserInfoUiState {
-        userRepository.loginState.firstOrNull()?.let { userInfo ->
-            if (userInfo is LoginState.LoginUserInfo) {
-                _userInfoUiState.update {
-                    it.copy(
-                        avatar = userInfo.avatar,
-                        nickname = userInfo.nickname,
-                        gender = userInfo.gender,
-                    )
-                }
-            }
-        }
-        return _userInfoUiState.value
-    }
-
     fun emitEvent(event: UserInfoUiEvent) = when(event) {
         is UserInfoUiEvent.UpdateNickname-> updateNickname(event.nickname)
         is UserInfoUiEvent.UpdateAvatar -> updateAvatar(event.byteArray)

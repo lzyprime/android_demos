@@ -1,12 +1,15 @@
 package io.lzyprime.svr.model
 
-sealed interface Failed {
-    object Unknown : Failed, Throwable()
-    object UserOrPasswordError : Failed, Throwable()
-    object TokenExpired : Failed, Throwable()
-    object UserNotExist : Failed, Throwable()
-    object ParseBodyFailed : Failed, Throwable()
-    object NotLogin: Failed, Throwable()
+sealed class Failed : Throwable() {
+    object Unknown : Failed()
+    object UserOrPasswordError : Failed()
+    object TokenExpired : Failed()
+    object UserNotExist : Failed()
+
+    sealed class LocalFailed : Failed()
+    object ParseBodyFailed : LocalFailed()
+    object TokenEmpty : LocalFailed()
+    object AlreadyLogin : LocalFailed()
 
     companion object {
         internal operator fun invoke(code: Int): Throwable =
@@ -18,3 +21,5 @@ sealed interface Failed {
             }
     }
 }
+
+fun Throwable.toFailed(): Failed = (this as? Failed) ?: Failed.Unknown
