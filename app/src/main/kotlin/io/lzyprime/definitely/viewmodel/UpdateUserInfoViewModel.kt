@@ -3,10 +3,11 @@ package io.lzyprime.definitely.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.lzyprime.definitely.R
+import io.lzyprime.definitely.data.FileRepository
 import io.lzyprime.definitely.data.UserRepository
 import io.lzyprime.definitely.data.di.IODispatcher
 import io.lzyprime.svr.model.Gender
-import io.lzyprime.svr.model.LoginState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -16,67 +17,73 @@ data class UserInfoUiState(
     var avatar: String = "",
     var nickname: String = "",
     var gender: Gender = Gender.Unknown,
-    var updatingUserInfo: Boolean = false,
-    var updatingAvatar: Boolean = false,
+    var loading: Boolean = true
 ) {
-    val loading: Boolean get() = updatingAvatar || updatingUserInfo
+    val editEnable: Boolean get() = !loading
     val submitButtonEnable: Boolean
         get() =
             avatar.isNotBlank() && nickname.isNotBlank() && gender != Gender.Unknown && !loading
 }
 
-sealed interface UserInfoUiEvent {
+sealed interface UserInfoAction {
     @JvmInline
-    value class UpdateNickname(val nickname: String):UserInfoUiEvent
+    value class UpdateNickname(val nickname: String) : UserInfoAction
+
     @JvmInline
-    value class UpdateGender(val gender: Gender):UserInfoUiEvent
+    value class UpdateGender(val gender: Gender) : UserInfoAction
+
     @JvmInline
-    value class UpdateAvatar(val byteArray: ByteArray):UserInfoUiEvent
-    object UpdateUserInfo:UserInfoUiEvent
+    value class UpdateAvatar(val byteArray: ByteArray) : UserInfoAction
+    object UpdateUserInfo : UserInfoAction
 }
 
 @HiltViewModel
 class UpdateUserInfoViewModel @Inject constructor(
+    private val fileRepository: FileRepository,
     private val userRepository: UserRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
-    private val _userInfoUiState = MutableStateFlow(UserInfoUiState())
-    val userInfoUiState = _userInfoUiState.asStateFlow()
+    private val _uiState = MutableStateFlow(UserInfoUiState())
+    val uiState = _uiState.asStateFlow()
 
-    fun emitEvent(event: UserInfoUiEvent) = when(event) {
-        is UserInfoUiEvent.UpdateNickname-> updateNickname(event.nickname)
-        is UserInfoUiEvent.UpdateAvatar -> updateAvatar(event.byteArray)
-        is UserInfoUiEvent.UpdateGender -> updateGender(event.gender)
-        UserInfoUiEvent.UpdateUserInfo -> updateUserInfo()
+    private val _uiEvent = MutableSharedFlow<UIEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
+
+
+    fun emitEvent(action: UserInfoAction) = when (action) {
+        is UserInfoAction.UpdateNickname -> updateNickname(action.nickname)
+        is UserInfoAction.UpdateAvatar -> updateAvatar(action.byteArray)
+        is UserInfoAction.UpdateGender -> updateGender(action.gender)
+        UserInfoAction.UpdateUserInfo -> updateUserInfo()
     }
 
     private fun updateNickname(v: String) {
-        _userInfoUiState.update { it.copy(nickname = v) }
+        _uiState.update { it.copy(nickname = v) }
     }
 
     private fun updateGender(v: Gender) {
-        _userInfoUiState.update { it.copy(gender = v) }
+        _uiState.update { it.copy(gender = v) }
     }
 
     private fun updateUserInfo() {
-        val nickname = _userInfoUiState.value.nickname
-        val gender = _userInfoUiState.value.gender
-        if (nickname.isNotBlank() && gender != Gender.Unknown) {
-            _userInfoUiState.update { it.copy(updatingUserInfo = true) }
+        val (avatar, nickname, gender) = _uiState.updateAndGet { it.copy(loading = true) }
+        if (nickname.isNotBlank() && gender != Gender.Unknown && avatar.isNotBlank()) {
             viewModelScope.launch(ioDispatcher) {
-                userRepository.updateUserInfo(nickname, gender)
-                _userInfoUiState.update { it.copy(updatingUserInfo = false) }
+                userRepository.updateUserInfo(nickname, gender, avatar)
+                _uiState.update { it.copy(loading = false) }
             }
         }
     }
 
     private fun updateAvatar(byteArray: ByteArray) {
-        _userInfoUiState.update { it.copy(updatingAvatar = true) }
+        _uiState.update { it.copy(loading = true) }
         viewModelScope.launch(ioDispatcher) {
-            userRepository.updateAvatar(byteArray).onSuccess { userInfo ->
-                _userInfoUiState.update { it.copy(avatar = userInfo.avatar) }
+            fileRepository.putPicture(byteArray).onSuccess { url ->
+                _uiState.update { it.copy(avatar = url) }
+            }.onFailure {
+                _uiEvent.emit(UIEvent.ShowSnackBar(R.string.failed_upload_file))
             }
-            _userInfoUiState.update { it.copy(updatingAvatar = false) }
+            _uiState.update { it.copy(loading = false) }
         }
     }
 }

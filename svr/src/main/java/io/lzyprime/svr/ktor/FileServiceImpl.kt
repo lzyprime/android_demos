@@ -5,8 +5,8 @@ import io.lzyprime.svr.FileService
 import io.lzyprime.svr.model.FileType
 
 internal class FileServiceImpl(private val ktorClient: KtorClient) : FileService {
-    override suspend fun putFile(type: FileType, byteArray: ByteArray): Result<Int> =
-        ktorClient.doRequest {
+    override suspend fun putFile(type: FileType, byteArray: ByteArray) =
+        ktorClient<String> {
             put(type.url) {
                 setBody(byteArray)
             }

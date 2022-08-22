@@ -1,4 +1,4 @@
-package io.lzyprime.definitely.data.models
+package io.lzyprime.definitely.viewmodel
 
 import io.lzyprime.definitely.R
 import io.lzyprime.svr.model.Failed

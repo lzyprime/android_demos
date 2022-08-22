@@ -1,8 +1,6 @@
 package io.lzyprime.definitely.ui.login
 
 import android.Manifest
-import android.content.Context
-import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -22,12 +20,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.ActivityNavigatorExtras
 import io.lzyprime.definitely.R
 import io.lzyprime.definitely.ui.utils.*
 import io.lzyprime.definitely.utils.toByteArray
 import io.lzyprime.definitely.viewmodel.UpdateUserInfoViewModel
-import io.lzyprime.definitely.viewmodel.UserInfoUiEvent
+import io.lzyprime.definitely.viewmodel.UserInfoAction
 import io.lzyprime.definitely.viewmodel.UserInfoUiState
 import io.lzyprime.svr.model.Gender
 
@@ -35,7 +32,7 @@ import io.lzyprime.svr.model.Gender
 fun UpdateUserInfoContent(
     updateUserInfoViewModel: UpdateUserInfoViewModel = viewModel()
 ) {
-    val uiState by updateUserInfoViewModel.userInfoUiState.collectAsState()
+    val uiState by updateUserInfoViewModel.uiState.collectAsState()
     Content(uiState = uiState, updateUserInfoViewModel::emitEvent)
 }
 
@@ -43,7 +40,7 @@ fun UpdateUserInfoContent(
 @Composable
 private fun Content(
     uiState: UserInfoUiState,
-    emitEvent: (UserInfoUiEvent) -> Unit
+    emitEvent: (UserInfoAction) -> Unit
 ) {
     val showUpdateAvatarDialog = remember { mutableStateOf(false) }
     Scaffold { padding ->
@@ -71,14 +68,14 @@ private fun Content(
             )
             Spacer(modifier = Modifier.height(32.dp))
             OutlinedTextField(value = uiState.nickname, onValueChange = {
-                emitEvent(UserInfoUiEvent.UpdateNickname(it))
+                emitEvent(UserInfoAction.UpdateNickname(it))
             })
             Spacer(modifier = Modifier.height(24.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(selected = uiState.gender == Gender.Male,
                     enabled = uiState.loading,
                     onClick = {
-                        emitEvent(UserInfoUiEvent.UpdateGender(Gender.Male))
+                        emitEvent(UserInfoAction.UpdateGender(Gender.Male))
                     })
                 Text(
                     text = stringResource(id = R.string.utf_male),
@@ -88,7 +85,7 @@ private fun Content(
                 RadioButton(selected = uiState.gender == Gender.Female,
                     enabled = uiState.loading,
                     onClick = {
-                        emitEvent(UserInfoUiEvent.UpdateGender(Gender.Female))
+                        emitEvent(UserInfoAction.UpdateGender(Gender.Female))
                     })
                 Text(
                     text = stringResource(id = R.string.utf_female),
@@ -98,7 +95,7 @@ private fun Content(
                 RadioButton(selected = uiState.gender == Gender.Secret,
                     enabled = uiState.loading,
                     onClick = {
-                        emitEvent(UserInfoUiEvent.UpdateGender(Gender.Secret))
+                        emitEvent(UserInfoAction.UpdateGender(Gender.Secret))
                     })
                 Text(text = stringResource(id = R.string.secrecy))
             }
@@ -106,7 +103,7 @@ private fun Content(
             Button(
                 enabled = uiState.submitButtonEnable,
                 onClick = {
-                    emitEvent(UserInfoUiEvent.UpdateUserInfo)
+                    emitEvent(UserInfoAction.UpdateUserInfo)
                 }) {
                 Text(stringResource(id = R.string.submit))
             }
@@ -121,7 +118,7 @@ private fun Content(
 @Composable
 private fun UpdateAvatarDialog(
     showDialog: MutableState<Boolean>,
-    emitEvent: (UserInfoUiEvent) -> Unit,
+    emitEvent: (UserInfoAction) -> Unit,
 ) {
     val fromCamera = updateAvatarFromCamera(emitEvent)
     val fromFile = updateAvatarFromFile(emitEvent)
@@ -169,13 +166,13 @@ private fun UpdateAvatarDialog(
 
 @Composable
 private fun updateAvatarFromCamera(
-    emitEvent: (UserInfoUiEvent) -> Unit,
+    emitEvent: (UserInfoAction) -> Unit,
 ): () -> Unit {
     val takePicturePreview = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview(),
         onResult = {
             it?.toByteArray()?.let { res ->
-                emitEvent(UserInfoUiEvent.UpdateAvatar(res))
+                emitEvent(UserInfoAction.UpdateAvatar(res))
             }
         },
     )
@@ -190,7 +187,7 @@ private fun updateAvatarFromCamera(
 
 @Composable
 private fun updateAvatarFromFile(
-    emitEvent: (UserInfoUiEvent) -> Unit,
+    emitEvent: (UserInfoAction) -> Unit,
 ): () -> Unit {
     val context = LocalContext.current
     val getContent = rememberLauncherForActivityResult(
@@ -199,7 +196,7 @@ private fun updateAvatarFromFile(
             if (it != null) {
                 context.contentResolver.openInputStream(it).use { stream ->
                     stream?.readBytes()?.let { bs ->
-                        emitEvent(UserInfoUiEvent.UpdateAvatar(bs))
+                        emitEvent(UserInfoAction.UpdateAvatar(bs))
                     }
                 }
             }

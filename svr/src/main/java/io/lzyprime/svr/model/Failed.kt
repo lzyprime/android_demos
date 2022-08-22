@@ -12,7 +12,7 @@ sealed class Failed : Throwable() {
     object AlreadyLogin : LocalFailed()
 
     companion object {
-        internal operator fun invoke(code: Int): Throwable =
+        internal operator fun invoke(code: Int): Failed =
             when (code) {
                 10000 -> UserOrPasswordError
                 10001 -> TokenExpired

@@ -66,11 +66,11 @@ android {
     sourceSets {
         getByName("main") {
             if (useCompose) {
-                kotlin.srcDir("src/ui/compose")
-                res.srcDir("src/ui/compose/res")
+                kotlin.srcDir("src/compose/kotlin")
+                res.srcDir("src/compose/res")
             } else {
-                res.srcDir("src/ui/view/res")
-                kotlin.srcDir("src/ui/view")
+                kotlin.srcDir("src/view/kotlin")
+                res.srcDir("src/view/res")
             }
         }
     }
@@ -88,8 +88,8 @@ dependencies {
         implementation("androidx.compose.ui:ui-tooling:$composeVersion")
         // material
 //        implementation("androidx.compose.material:material:$composeVersion")
-        implementation("androidx.compose.material3:material3:1.0.0-alpha15")
-        implementation("androidx.compose.material3:material3-window-size-class:1.0.0-alpha15")
+        implementation("androidx.compose.material3:material3:1.0.0-alpha16")
+        implementation("androidx.compose.material3:material3-window-size-class:1.0.0-alpha16")
 
         implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
 
@@ -97,7 +97,7 @@ dependencies {
         // permission request
         implementation("com.google.accompanist:accompanist-permissions:0.26.0-alpha")
     } else {
-        implementation("androidx.appcompat:appcompat:1.4.2")
+        implementation("androidx.appcompat:appcompat:1.5.0")
         implementation("androidx.activity:activity-ktx:$activityVersion")
         implementation("com.google.android.material:material:1.6.1")
         implementation("androidx.constraintlayout:constraintlayout:2.1.4")

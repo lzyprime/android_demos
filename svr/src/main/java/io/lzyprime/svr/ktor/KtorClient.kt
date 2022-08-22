@@ -6,44 +6,22 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.cookies.*
-import io.ktor.client.plugins.websocket.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.lzyprime.svr.SvrService
 import io.lzyprime.svr.model.Failed
-import io.lzyprime.svr.model.StateAndEvent
+import io.lzyprime.svr.model.StateManager
 import java.time.Duration
 
 internal class KtorClient(reqTimeout: Duration?) {
     companion object {
         private val DefaultReqTimeout = Duration.ofSeconds(5) // 5s
-        private const val COOKIE_NAME = "auth_code"
     }
 
-    private data class CookieStorageWithToken(var token: String = "") : CookiesStorage {
-        override suspend fun addCookie(requestUrl: Url, cookie: Cookie) {
-            if (cookie.name == COOKIE_NAME && token != cookie.value) {
-                token = cookie.value
-            }
-        }
 
-        override fun close() {}
 
-        override suspend fun get(requestUrl: Url): List<Cookie> =
-            if (token.isBlank())
-                emptyList()
-            else
-                listOf(Cookie(COOKIE_NAME, token))
-    }
-
-    private val cookieStorageWithToken = CookieStorageWithToken()
-    var token get() = cookieStorageWithToken.token
-    set(value) {
-        cookieStorageWithToken.token = token
-    }
-
-    val stateAndEvent = StateAndEvent()
+    val stateManager = StateManager()
 
     private val client by lazy {
         HttpClient(OkHttp) {
@@ -60,12 +38,12 @@ internal class KtorClient(reqTimeout: Duration?) {
                 contentType(ContentType.Application.Json)
             }
             install(HttpCookies) {
-                storage = cookieStorageWithToken
+                storage = stateManager.cookieStorage
             }
         }
     }
 
-    suspend inline fun <reified T> doRequest(reqBlock: HttpClient.() -> HttpResponse): Result<T> =
+    suspend inline operator fun <reified T> invoke(reqBlock: HttpClient.() -> HttpResponse): Result<T> =
         try {
             val rsp = client.reqBlock()
             if (rsp.status.isSuccess()) {
@@ -75,7 +53,9 @@ internal class KtorClient(reqTimeout: Duration?) {
                     Result.failure(Failed.ParseBodyFailed)
                 }
             } else {
-                Result.failure(Failed(rsp.status.value))
+                Result.failure(Failed(rsp.status.value).also {
+                    stateManager.onFailed(it)
+                })
             }
         } catch (e: Exception) {
             Result.failure(e)

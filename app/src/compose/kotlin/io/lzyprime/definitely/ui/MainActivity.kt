@@ -54,16 +54,12 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun MainContent() {
-        val loginState = userViewModel.loginState.collectAsState(initial = LoginState.Loading)
-        val isInit by remember {
-            derivedStateOf { loginState.value == LoginState.Loading }
-        }
-        if (isInit) {
+        val loginState by userViewModel.loginState.collectAsState(initial = LoginState.Loading)
+        if(loginState == LoginState.Loading) {
             SplashScreen()
         } else {
             val snackBarHostState = remember { SnackbarHostState() }
             val reEnterExit = stringResource(id = R.string.re_enter_press_again_to_exit)
-
             val scope = rememberCoroutineScope()
             BackHandler {
                 if (snackBarHostState.currentSnackbarData != null) finish() else scope.launch {
@@ -77,10 +73,10 @@ class MainActivity : ComponentActivity() {
                     },
                 ) { padding ->
                     Box(Modifier.padding(padding)) {
-                        when (val cur = loginState.value) {
-                            is LoginState.LoginUserInfo ->
-                                if (cur.needComplete) UpdateUserInfoContent() else HomeNavHost()
-                            else -> LoginContent()
+                        if(loginState == LoginState.Logout) {
+                            LoginContent()
+                        } else {
+                            HomeNavHost()
                         }
                     }
                 }

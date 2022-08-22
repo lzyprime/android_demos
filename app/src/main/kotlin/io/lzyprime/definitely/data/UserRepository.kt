@@ -22,9 +22,6 @@ class UserRepository @Inject constructor(
         }
     suspend fun autoLogin() = userService.login(userLocalDataSource.svrToken.first())
 
-    suspend fun updateAvatar(fileByteArray: ByteArray) =
-        userService.updateAvatar(fileByteArray)
-
-    suspend fun updateUserInfo(nickname:String, gender: Gender) =
-        userService.updateUserInfo(nickname, gender)
+    suspend fun updateUserInfo(nickname:String?, gender: Gender?, avatar:String?) =
+        userService.updateUserInfo(nickname, gender, avatar)
 }
