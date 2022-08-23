@@ -28,9 +28,10 @@
         <!--        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>-->
         <!--        <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>-->
         <!-- public -->
-        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="textInputOutlinedStyle">@style/Widget.Definitely.TextInputLayout.OutlinedBox</item>
         <item name="textInputStyle">?attr/textInputOutlinedStyle</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item><!-- default, shortEdges, never -->
     </style>
 </resources>

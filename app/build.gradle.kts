@@ -17,12 +17,12 @@ if (!useCompose) {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "io.lzyprime.definitely"
         minSdk = 29
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         if (useCompose) {
@@ -81,7 +81,9 @@ dependencies {
     implementation(project(":svr"))
 
     implementation("androidx.core:core-ktx:1.8.0")
-
+    // hilt
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
     if (useCompose) {
         implementation("androidx.activity:activity-compose:$activityVersion")
         implementation("androidx.compose.animation:animation:$composeVersion")
@@ -94,8 +96,6 @@ dependencies {
         implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
 
         implementation("androidx.navigation:navigation-compose:$navVersion")
-        // permission request
-        implementation("com.google.accompanist:accompanist-permissions:0.26.0-alpha")
     } else {
         implementation("androidx.appcompat:appcompat:1.5.0")
         implementation("androidx.activity:activity-ktx:$activityVersion")
@@ -111,7 +111,4 @@ dependencies {
     }
     // dataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
-    // hilt
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 }

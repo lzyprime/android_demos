@@ -18,4 +18,7 @@ object SvrServiceModule {
 
     @Provides
     fun provideUserService(): UserService = svrService.userService
+
+    @Provides
+    fun provideFileService(): FileService = svrService.fileService
 }

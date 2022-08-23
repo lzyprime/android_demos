@@ -4,5 +4,4 @@
         android:angle="315"
         android:endColor="#6750A4"
         android:startColor="#7D5260" />
-    <size android:height="720dp" android:width="720dp"/>
 </shape>
