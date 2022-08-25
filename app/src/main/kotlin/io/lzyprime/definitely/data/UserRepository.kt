@@ -1,5 +1,7 @@
 package io.lzyprime.definitely.data
 
+import androidx.datastore.preferences.core.edit
+import io.lzyprime.definitely.data.perfs.UserKey
 import io.lzyprime.definitely.data.perfs.UserLocalDataSource
 import io.lzyprime.svr.UserService
 import io.lzyprime.svr.model.Gender
@@ -14,14 +16,19 @@ class UserRepository @Inject constructor(
 ) {
 
     val loginState get() = userService.loginState
+    val userInfo get() = userService.userInfoState
 
-    suspend fun login(user: String, password: String) =
-        userService.login(user, password).map { (res, token) ->
-            userLocalDataSource.svrToken.update(token)
+    suspend fun login(username: String, password: String) =
+        userService.login(username, password).map { (res, token) ->
+            userLocalDataSource.update(
+                token,
+                username,
+            )
             res
         }
+
     suspend fun autoLogin() = userService.login(userLocalDataSource.svrToken.first())
 
-    suspend fun updateUserInfo(nickname:String?, gender: Gender?, avatar:String?) =
+    suspend fun updateUserInfo(nickname: String?, gender: Gender?, avatar: String?) =
         userService.updateUserInfo(nickname, gender, avatar)
 }

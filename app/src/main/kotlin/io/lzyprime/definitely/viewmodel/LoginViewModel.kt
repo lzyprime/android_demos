@@ -1,4 +1,4 @@
- package io.lzyprime.definitely.viewmodel
+package io.lzyprime.definitely.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class LoginUiState(
+data class LoginUIState(
     var username: String = "",
     var password: String = "",
-    var isLoading : Boolean = false,
+    var isLoading: Boolean = false,
 ) {
     val enableLoginBtn: Boolean get() = username.isNotBlank() && password.isNotEmpty() && !isLoading
 }
@@ -25,27 +25,25 @@ class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
-    private val _loginUiState = MutableStateFlow(LoginUiState())
-    val loginUiState = _loginUiState.asStateFlow()
+    private val _loginUIState = MutableStateFlow(LoginUIState())
+    val loginUIState = _loginUIState.asStateFlow()
 
     fun editUsername(text: CharSequence?) {
-        _loginUiState.update { it.copy(username = text?.toString().orEmpty()) }
+        _loginUIState.update { it.copy(username = text?.toString().orEmpty()) }
     }
 
     fun editPassword(text: CharSequence?) {
-        _loginUiState.update { it.copy(password = text?.toString().orEmpty()) }
+        _loginUIState.update { it.copy(password = text?.toString().orEmpty()) }
     }
 
     fun login() {
-        _loginUiState.update { it.copy(isLoading = true) }
+        _loginUIState.update { it.copy(isLoading = true) }
         viewModelScope.launch(ioDispatcher) {
-            val res = userRepository.login(
-                _loginUiState.value.username,
-                _loginUiState.value.password,
-            ).isSuccess
-            if(!res) {
-                _loginUiState.update { it.copy(isLoading = false) }
-            }
+            userRepository.login(
+                _loginUIState.value.username,
+                _loginUIState.value.password,
+            )
+            _loginUIState.update { it.copy(isLoading = false) }
         }
     }
 }

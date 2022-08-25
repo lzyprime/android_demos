@@ -33,6 +33,7 @@ fun DefinitelyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
+    decorFitsSystemWindows:Boolean = false,
     content: @Composable () -> Unit
 ) {
     val isDynamicColor = dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
@@ -46,8 +47,9 @@ fun DefinitelyTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = Color.Transparent.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            window.statusBarColor = colorScheme.background.toArgb()
+            WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows)
         }
     }
 

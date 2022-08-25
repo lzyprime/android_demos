@@ -19,7 +19,7 @@ import io.lzyprime.definitely.viewmodel.LoginViewModel
 fun LoginContent(
     loginViewModel: LoginViewModel = viewModel()
 ) {
-    val uiState by loginViewModel.loginUiState.collectAsState()
+    val uiState by loginViewModel.loginUIState.collectAsState()
     var showPassword by remember { mutableStateOf(false) }
 
     Scaffold(Modifier.fillMaxSize()) { padding ->

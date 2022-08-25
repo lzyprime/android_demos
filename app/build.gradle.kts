@@ -34,7 +34,7 @@ android {
 
     buildFeatures {
         viewBinding = !useCompose // 视图绑定，取代`kotlin-android-extensions`
-//        dataBinding = !useCompose // 数据绑定
+//        dataBinding = true // 数据绑定
         compose = useCompose
     }
 
@@ -84,6 +84,13 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-compiler:$hiltVersion")
+    // For instrumentation tests
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:$hiltVersion")
+    // For local unit tests
+    testImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
+    kaptTest("com.google.dagger:hilt-compiler:$hiltVersion")
+
     if (useCompose) {
         implementation("androidx.activity:activity-compose:$activityVersion")
         implementation("androidx.compose.animation:animation:$composeVersion")

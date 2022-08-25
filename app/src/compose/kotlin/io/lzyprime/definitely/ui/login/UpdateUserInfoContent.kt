@@ -23,26 +23,37 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.lzyprime.definitely.R
 import io.lzyprime.definitely.ui.utils.*
 import io.lzyprime.definitely.utils.toByteArray
+import io.lzyprime.definitely.viewmodel.UpdateUserInfoAction
 import io.lzyprime.definitely.viewmodel.UpdateUserInfoViewModel
-import io.lzyprime.definitely.viewmodel.UserInfoAction
 import io.lzyprime.definitely.viewmodel.UserInfoUiState
 import io.lzyprime.svr.model.Gender
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateUserInfoContent(
-    updateUserInfoViewModel: UpdateUserInfoViewModel = viewModel()
+    viewModel: UpdateUserInfoViewModel = viewModel()
 ) {
-    val uiState by updateUserInfoViewModel.uiState.collectAsState()
-    Content(uiState = uiState, updateUserInfoViewModel::emitEvent)
+    val uiState by viewModel.uiState.collectAsState()
+    val showUpdateAvatarDialog = remember { mutableStateOf(false) }
+    UpdateUserInfoContent(
+        uiState = uiState,
+        emitAction = viewModel::emit,
+        onClickAvatar = {
+            showUpdateAvatarDialog.value = true
+        }
+    )
+    UpdateAvatarDialog(showDialog = showUpdateAvatarDialog) {
+        viewModel.emit(UpdateUserInfoAction.UpdateAvatar(it))
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Content(
+private fun UpdateUserInfoContent(
     uiState: UserInfoUiState,
-    emitEvent: (UserInfoAction) -> Unit
+    emitAction: (UpdateUserInfoAction) -> Unit,
+    onClickAvatar: () -> Unit,
 ) {
-    val showUpdateAvatarDialog = remember { mutableStateOf(false) }
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -62,20 +73,18 @@ private fun Content(
                         shape = CircleShape
                     )
                     .clip(CircleShape)
-                    .clickable {
-                        showUpdateAvatarDialog.value = true
-                    }
+                    .clickable(onClick = onClickAvatar)
             )
             Spacer(modifier = Modifier.height(32.dp))
             OutlinedTextField(value = uiState.nickname, onValueChange = {
-                emitEvent(UserInfoAction.UpdateNickname(it))
+                emitAction(UpdateUserInfoAction.UpdateNickName(it))
             })
             Spacer(modifier = Modifier.height(24.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(selected = uiState.gender == Gender.Male,
                     enabled = uiState.loading,
                     onClick = {
-                        emitEvent(UserInfoAction.UpdateGender(Gender.Male))
+                        emitAction(UpdateUserInfoAction.UpdateGender(Gender.Male))
                     })
                 Text(
                     text = stringResource(id = R.string.utf_male),
@@ -85,7 +94,7 @@ private fun Content(
                 RadioButton(selected = uiState.gender == Gender.Female,
                     enabled = uiState.loading,
                     onClick = {
-                        emitEvent(UserInfoAction.UpdateGender(Gender.Female))
+                        emitAction(UpdateUserInfoAction.UpdateGender(Gender.Female))
                     })
                 Text(
                     text = stringResource(id = R.string.utf_female),
@@ -95,7 +104,7 @@ private fun Content(
                 RadioButton(selected = uiState.gender == Gender.Secret,
                     enabled = uiState.loading,
                     onClick = {
-                        emitEvent(UserInfoAction.UpdateGender(Gender.Secret))
+                        emitAction(UpdateUserInfoAction.UpdateGender(Gender.Secret))
                     })
                 Text(text = stringResource(id = R.string.secrecy))
             }
@@ -103,25 +112,23 @@ private fun Content(
             Button(
                 enabled = uiState.submitButtonEnable,
                 onClick = {
-                    emitEvent(UserInfoAction.UpdateUserInfo)
+                    emitAction(UpdateUserInfoAction.Submit)
                 }) {
                 Text(stringResource(id = R.string.submit))
             }
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
-
-    UpdateAvatarDialog(showDialog = showUpdateAvatarDialog, emitEvent)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UpdateAvatarDialog(
     showDialog: MutableState<Boolean>,
-    emitEvent: (UserInfoAction) -> Unit,
+    updateAvatar: (ByteArray) -> Unit,
 ) {
-    val fromCamera = updateAvatarFromCamera(emitEvent)
-    val fromFile = updateAvatarFromFile(emitEvent)
+    val fromCamera = updateAvatarFromCamera(updateAvatar)
+    val fromFile = updateAvatarFromFile(updateAvatar)
 
     if (showDialog.value) {
         AlertDialog(
@@ -166,13 +173,13 @@ private fun UpdateAvatarDialog(
 
 @Composable
 private fun updateAvatarFromCamera(
-    emitEvent: (UserInfoAction) -> Unit,
+    updateAvatar: (ByteArray) -> Unit,
 ): () -> Unit {
     val takePicturePreview = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview(),
         onResult = {
             it?.toByteArray()?.let { res ->
-                emitEvent(UserInfoAction.UpdateAvatar(res))
+                updateAvatar(res)
             }
         },
     )
@@ -187,7 +194,7 @@ private fun updateAvatarFromCamera(
 
 @Composable
 private fun updateAvatarFromFile(
-    emitEvent: (UserInfoAction) -> Unit,
+    updateAvatar: (ByteArray) -> Unit,
 ): () -> Unit {
     val context = LocalContext.current
     val getContent = rememberLauncherForActivityResult(
@@ -196,7 +203,7 @@ private fun updateAvatarFromFile(
             if (it != null) {
                 context.contentResolver.openInputStream(it).use { stream ->
                     stream?.readBytes()?.let { bs ->
-                        emitEvent(UserInfoAction.UpdateAvatar(bs))
+                        updateAvatar(bs)
                     }
                 }
             }
@@ -210,14 +217,11 @@ private fun updateAvatarFromFile(
 @Preview
 @Composable
 private fun PreviewContent() {
-    Content(
-        UserInfoUiState(),
-        {},
-    )
+    UpdateUserInfoContent(UserInfoUiState(), {}, {})
 }
 
 @Preview
 @Composable
 fun PreviewDialog() {
-    UpdateAvatarDialog(mutableStateOf(true), {})
+    UpdateAvatarDialog(mutableStateOf(true)) {}
 }

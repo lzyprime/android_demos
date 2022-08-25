@@ -25,16 +25,17 @@ data class UserInfoUiState(
             avatar.isNotBlank() && nickname.isNotBlank() && gender != Gender.Unknown && !loading
 }
 
-sealed interface UserInfoAction {
+sealed interface UpdateUserInfoAction {
     @JvmInline
-    value class UpdateNickname(val nickname: String) : UserInfoAction
+    value class UpdateNickName(val nickname: String) : UpdateUserInfoAction
 
     @JvmInline
-    value class UpdateGender(val gender: Gender) : UserInfoAction
+    value class UpdateGender(val gender: Gender) : UpdateUserInfoAction
 
     @JvmInline
-    value class UpdateAvatar(val byteArray: ByteArray) : UserInfoAction
-    object UpdateUserInfo : UserInfoAction
+    value class UpdateAvatar(val byteArray: ByteArray):UpdateUserInfoAction
+
+    object Submit : UpdateUserInfoAction
 }
 
 @HiltViewModel
@@ -49,14 +50,12 @@ class UpdateUserInfoViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UIEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-
-    fun emitEvent(action: UserInfoAction) = when (action) {
-        is UserInfoAction.UpdateNickname -> updateNickname(action.nickname)
-        is UserInfoAction.UpdateAvatar -> updateAvatar(action.byteArray)
-        is UserInfoAction.UpdateGender -> updateGender(action.gender)
-        UserInfoAction.UpdateUserInfo -> updateUserInfo()
+    fun emit(action: UpdateUserInfoAction) = when(action) {
+        is UpdateUserInfoAction.UpdateAvatar -> updateAvatar(action.byteArray)
+        is UpdateUserInfoAction.UpdateGender -> updateGender(action.gender)
+        is UpdateUserInfoAction.UpdateNickName -> updateNickname(action.nickname)
+        UpdateUserInfoAction.Submit -> updateUserInfo()
     }
-
     private fun updateNickname(v: String) {
         _uiState.update { it.copy(nickname = v) }
     }

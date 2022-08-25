@@ -9,6 +9,7 @@ import androidx.navigation.navigation
 
 @Composable
 fun HomeNavHost(
+    isExpanded: Boolean,
     navController: NavHostController = rememberNavController(),
 ) {
 
