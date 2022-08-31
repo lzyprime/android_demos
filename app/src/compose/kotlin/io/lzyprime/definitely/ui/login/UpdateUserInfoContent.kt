@@ -28,7 +28,6 @@ import io.lzyprime.definitely.viewmodel.UpdateUserInfoViewModel
 import io.lzyprime.definitely.viewmodel.UserInfoUiState
 import io.lzyprime.svr.model.Gender
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateUserInfoContent(
     viewModel: UpdateUserInfoViewModel = viewModel()
